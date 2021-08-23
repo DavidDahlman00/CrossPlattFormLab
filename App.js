@@ -1,13 +1,18 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {useState, useEffect} from 'react';
-import { StyleSheet,Image, Text, View, Button, Alert } from 'react-native';
+import { StyleSheet, Image, Text, View, Button, Alert } from 'react-native';
 import DisplayImage from './components/DisplayImage'
+import { Provider } from 'react-redux';
+import { createStore } from 'redux';
+import { rootReducer } from './features/rootReducer';
+import CounterRedux from './features/CounterRedux';
 
 
 export default function App() {
   const [hasData, setHasData] = useState("");
-  
+  const store = createStore(rootReducer);
+ 
 const url = "https://rickandmortyapi.com/api/character/?page=1"
 
 useEffect( ()=>{
@@ -24,19 +29,23 @@ useEffect( ()=>{
 },[])
 if(hasData !=""){
   return (
-    <View style={styles.container}>
-      <Text>{JSON.stringify(hasData[0].name)}</Text>  
-     <DisplayImage image={hasData[0].image}/>
-      {/* <Text>{JSON.stringify(hasData[0].image)}</Text>  */}
-      <Button
-        title="Press me"
-        onPress={() => {
+    <Provider store={store}>
+      <View style={styles.container}>
+        <Text>{JSON.stringify(hasData[0].name)}</Text>  
+        <DisplayImage image={hasData}/>
+        {/* <Text>{JSON.stringify(hasData[0].image)}</Text>  */}
+        <Button
+          title="Press me"
+          onPress={() => {
           Alert.alert('Simple Button pressed')
-          
-        }}
-      />
-      <StatusBar style="auto" />
-    </View>
+          }}
+        />
+        <CounterRedux />
+        
+        <StatusBar style="auto" />
+      </View>
+    </Provider>
+   
   );
 }else{
 return (
