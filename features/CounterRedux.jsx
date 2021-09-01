@@ -3,6 +3,7 @@ import { actions } from "./counter";
 import React from 'react';
 import {Text, View, Button } from 'react-native';
 
+
 const CounterRedux = () => {
 
     const value = useSelector(state => state.counter)
@@ -14,7 +15,6 @@ const CounterRedux = () => {
 
     return (
         <View>
-        <Text>{value}</Text>
             <Button title= "increase" onPress={increase}>increase</Button>
             <Button title= "decrease" onPress={decrease}>decrease</Button>
         </View>

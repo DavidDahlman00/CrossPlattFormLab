@@ -6,10 +6,10 @@ const decrease = createAction('decrease counter');
 const actions = {increase, decrease};
 
 
-const initialstate = 0;
+const initialstate = 1;
 
 const reducer = createReducer(initialstate, {
-    [increase] : (state, action) => {if(state < 11)
+    [increase] : (state, action) => {if(state < 34)
         {return state + 1}
     else
     {return state}},

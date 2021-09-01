@@ -1,27 +1,45 @@
-import React, { useState } from "react";
-import { StyleSheet,Image, Text, View } from 'react-native';
-import { useSelector } from "react-redux"
-const DisplayImage = (props) => {
-    const value = useSelector(state => state.counter)
-    return (    
-      <View style={styles.imageHolder}>
-        <Text>{value} {JSON.stringify(props.image[value].name)}</Text>
-        <Image 
-          style={styles.image}
-          source={{uri:props.image[value].image}}
-          />
-      </View>
+import React from "react";
+import { StyleSheet,Image, View, TouchableOpacity } from 'react-native';
+import Info from './Info'
+
+
+const DisplayImage = ({item, pressHandler }) => {
+    
+    return (   
+      <TouchableOpacity onPress={()=>pressHandler(item.id)}>
+        <View style={styles.box}>
+          <Image 
+            style={styles.image}
+            source={{uri:item.image}}
+            />
+            <Info name={item.name} 
+                  status={item.status}  
+                  species={item.species} />
+          
+        </View>
+      </TouchableOpacity> 
     )
   }
 
   const styles = StyleSheet.create({
+    box: {
+      flex: 1,
+      alignItems: "center",
+      justifyContent: "center",
+      width: 110,
+      height: 140,
+      
+     
+    },
     image: {
       alignItems: "center",
       justifyContent: "center",
-      width: 100,
-      height: 100,
-      borderColor: "yellow"
-      
+      width: 80,
+      height: 80,
+      borderColor: "yellow",
+    },
+    text: {
+      color: '#333',
     }
   });
 
