@@ -1,18 +1,38 @@
 import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import {useState, useEffect} from 'react';
-import { StyleSheet, Text, View, Button, FlatList} from 'react-native';
+import {StyleSheet, Text, View, Button, FlatList} from 'react-native';
 import DisplayImage from './components/DisplayImage'
-import { useSelector } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import CounterRedux from './features/CounterRedux';
 import Header from './components/Header'
+import { actions } from "./features/addImages";
 
 export default function App2() {
+  const dispatch = useDispatch();
+  const getMore = () => {
+    dispatch(actions.success("test", 1))
+    ;}
   const [hasData, setHasData] = useState("");
   const value = useSelector(state => state.addImage.value)
+  const myImageList = useSelector(state => state.addImage.imageList)
+
+
+
   
 const url = "https://rickandmortyapi.com/api/character/?page="
 
+async function fetchMore(dispatch) {
+  //dispatch(actions.isFetching())
+  try {
+      let response = await fetch(url+String(value))
+      let data = await response.json()
+      console.log('Got data: ', data )
+      dispatch(actions.success(data.results, value + 1))
+  } catch {
+      dispatch(actions.failure())
+  }
+}
 
 useEffect( ()=>{
   async function fetchData(){
@@ -24,16 +44,10 @@ useEffect( ()=>{
     
     setHasData(data.results)
   } 
-  fetchData();
+  fetchData([dispatch]);
  
 },[])
 
-const getNextPage = () => {
-  if (page < 34){
-    setPage((page) => {return page +1})
-    fetchData()
-  }
-}
 
 if(hasData !=""){
   
@@ -46,6 +60,7 @@ if(hasData !=""){
   
       <View>
         <Header/>
+        <Text>{value}</Text>
         <View style={styles.container}>
             <View style={styles.flatList}>
             <FlatList 
@@ -59,8 +74,13 @@ if(hasData !=""){
      
             <Button
             title="Get more persons " 
-            onPress={() => {getNextPage
-            }}
+            onPress={() => {
+              //getMore()
+              fetchMore
+            console.log("button pressed", {value})
+            console.log("button pressed", myImageList)
+            }
+            }
             />
             <CounterRedux />
         </View>

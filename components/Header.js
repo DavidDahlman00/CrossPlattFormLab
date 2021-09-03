@@ -4,10 +4,13 @@ import { useSelector } from 'react-redux';
 
 export default function Header() {
     const value = useSelector(state => state.counter)
+    const myImageList = useSelector(state => state.addImage.value)
+    console.log("header value", {value})
+    console.log("header list", {myImageList})
     return (
         <View style={styles.header}>
-            <Text style={styles.title}>My Lab: Button count = {value}</Text>
-            
+            <Text style={styles.title}>My Lab (test): Button count = {value}</Text>
+            <Text style={styles.title}>{myImageList}</Text>
         </View>
     )
 }

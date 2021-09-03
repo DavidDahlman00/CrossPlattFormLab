@@ -1,13 +1,21 @@
 import { createAction, createReducer } from "@reduxjs/toolkit";
-const getImages = createAction('get next page of images');
 
 
-const actions = {getImages};
-
+const isFetching = createAction('is fetching')
+const success = createAction('success')
+const failure = createAction('failure')
+const actions = {isFetching, success, failure}
+const STATUS = {
+    NORMAL: 'normal',
+    FETCHING: 'is fetching',
+    SUCCESS: 'success',
+    FAILURE: 'failure'
+}
 
 const initialstate = {
-    imageList: "",
-    value: 1
+    status: STATUS.NORMAL,
+    imageList: fetchData(1),
+    value: 4
 };
 
 async function fetchData(value){
@@ -18,15 +26,27 @@ async function fetchData(value){
 } 
 
 const reducer = createReducer(initialstate, {
-    [getImages] : (state, action) => {if(state < 34){
-        const newList = fetchData(state.value)
+    [isFetching]: (state, action) => ({
+        ...state,
+        status: STATUS.FETCHING
+    }),
+    [failure]: (state, action) => ({
+        ...state,
+        status: STATUS.FAILURE
+    }),
+    [success] : (state, action) => {if(state.value < 34){
+//        const newList = fetchData(state.value)
 
-        return({imageList: [...state.imageList, newList], value: state.value +1 })
+        return({status: STATUS.SUCCESS,
+             imageList: action.payload, 
+             value: action.payload + 1})
     }
+    
         
     else
-    {return state}}
+    {return {state}}}
     
 })
 
 export { actions, reducer};
+
